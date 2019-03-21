@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Announcements\Handler;
 
 use Announcements\Entity\Announcement;
+use Announcements\Model\AnnouncementWrapper;
 use Doctrine\ORM\EntityManager;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -49,6 +50,8 @@ class AnnouncementsViewHandler implements RequestHandlerInterface
     {
         $id               = $request->getAttribute('id', null);
         $entityRepository = $this->entityManager->getRepository(Announcement::class);
+
+        /** @var Announcement|null $entity */
         $entity           = $entityRepository->find($id);
 
         if (empty($entity)) {
@@ -66,7 +69,9 @@ class AnnouncementsViewHandler implements RequestHandlerInterface
             throw $problem;
         }
 
-        $resource = $this->resourceGenerator->fromObject($entity, $request);
+        $instance = new AnnouncementWrapper($entity);
+
+        $resource = $this->resourceGenerator->fromObject($instance, $request);
         return $this->responseFactory->createResponse($request, $resource);
     }
 }
