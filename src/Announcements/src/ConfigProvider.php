@@ -12,6 +12,7 @@ use Zend\Expressive\Application;
 use Zend\Expressive\Hal\Metadata\MetadataMap;
 use Zend\Expressive\Hal\Metadata\RouteBasedCollectionMetadata;
 use Zend\Expressive\Hal\Metadata\RouteBasedResourceMetadata;
+use Zend\Hydrator\ObjectPropertyHydrator;
 use Zend\Hydrator\ReflectionHydrator;
 
 /**
@@ -96,7 +97,7 @@ class ConfigProvider
         return [
             [
                 '__class__' => RouteBasedResourceMetadata::class,
-                'resource_class' => Announcement::class,
+                'resource_class' => Model\AnnouncementWrapper::class,
                 'route' => 'announcements.view',
                 'extractor' => ReflectionHydrator::class,
             ],
